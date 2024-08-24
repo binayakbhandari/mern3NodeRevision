@@ -1,18 +1,35 @@
 require('dotenv').config()
-const connectDatabase = require("./database")
 const express = require('express')
+const connectDatabase = require("./database")
+const Blog = require('./model/blogModel')
 
 connectDatabase()
 const app = express()
+app.use(express.json())
 
 // app.get('/',(req,res)=>{
 //     res.send("Welcome to home page")
 // })
-app.get('/', (req,res)=>{
+// app.get('/',(req,res)=>{
+//     res.status(200).json({
+//         message : "Welcome to home page."
+//     })
+// })
+
+
+app.post('/blog',async (req,res)=>{
+    const {title,subtitle,description,image} = req.body
+    await Blog.create({
+        title : title,
+        subtitle : subtitle,
+        description : description,
+        image : image
+    })
     res.status(200).json({
-        message : "API hit successfully"
+        message : "Blog created successfully"
     })
 })
+
 
 
 
