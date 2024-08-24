@@ -19,6 +19,11 @@ app.use(express.json())
 
 app.post('/blog',async (req,res)=>{
     const {title,subtitle,description,image} = req.body
+    if(!title || !subtitle || !description){
+        return res.status(400).json({
+            message : "Please enter title, subtitle or description"
+        })
+    }
     await Blog.create({
         title : title,
         subtitle : subtitle,
