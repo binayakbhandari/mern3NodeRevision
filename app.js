@@ -8,6 +8,7 @@ const app = express()
 app.use(express.json())
 const {multer,storage} = require('./middleware/multerConfig')
 const upload = multer({storage : storage})
+const fs = require('fs')
 
 // app.get('/',(req,res)=>{
 //     res.send("Welcome to home page")
@@ -21,10 +22,10 @@ const upload = multer({storage : storage})
 
 app.post('/blog',upload.single('image'), async (req,res)=>{
     const {title,subtitle,description} = req.body
-    let filename;
-    if(req.file){
-        filename = req.file.filename
-    }
+    const filename = req.file.filename
+    // if(req.file){
+    //     filename = req.file.filename
+    // }
 
     if(!title || !subtitle || !description){
         return res.status(400).json({
@@ -49,6 +50,48 @@ app.get('/blog',async (req,res)=>{
         message : "Blogs fetched successfully",
         data : blogs
     })
+})
+
+// Single read operation with findById() method
+app.get('/blog/:id',async (req,res)=>{
+    const id = req.params.id
+    const blog = await Blog.findById(id)
+
+    if(!blog){
+        return res.status(404).json({
+            message : "No data found"
+        })
+    }
+    res.status(200).json({
+        message : "Blog fetched successfully",
+        data : blog
+    })
+})
+
+// Delete operation
+app.delete('/blog/:id',async (req,res)=>{
+    const id = req.params.id
+    const blog = await Blog.findById(id)
+    const imageName = blog.image
+
+    // if(!blog){
+    //     return res.status(404).json({
+    //         message : "No data found to delete"
+    //     })
+    // }
+
+    fs.unlink(`/storage/${imageName}`,(err)=>{
+        if(err){
+            console.log(err)
+        }else{
+            console.log("File deleted successfully")
+        }
+    })
+    await Blog.findByIdAndDelete(id)
+    res.status(200).json({
+        message : "Blog deleted successfully"
+    })
+
 })
 
 
