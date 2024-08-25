@@ -20,12 +20,12 @@ const fs = require('fs')
 // })
 
 
-app.post('/blog',upload.single('image'), async (req,res)=>{
+app.post('/blog',upload.single('image'),async (req,res)=>{
     const {title,subtitle,description} = req.body
-    const filename = req.file.filename
-    // if(req.file){
-    //     filename = req.file.filename
-    // }
+    let filename;
+    if(req.file){
+        filename = req.file.filename
+    }
 
     if(!title || !subtitle || !description){
         return res.status(400).json({
@@ -69,29 +69,57 @@ app.get('/blog/:id',async (req,res)=>{
 })
 
 // Delete operation
-app.delete('/blog/:id',async (req,res)=>{
+app.delete("/blog/:id", async (req, res) => {
     const id = req.params.id
     const blog = await Blog.findById(id)
     const imageName = blog.image
 
-    // if(!blog){
-    //     return res.status(404).json({
-    //         message : "No data found to delete"
-    //     })
-    // }
+    if(imageName){
+        fs.unlink(`storage/${imageName}`, (err) => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("File deleted successfully")
+            }
+        })
+    }else{
+        console.log("File not found in this blog")
+    }
 
-    fs.unlink(`/storage/${imageName}`,(err)=>{
-        if(err){
-            console.log(err)
-        }else{
-            console.log("File deleted successfully")
-        }
-    })
     await Blog.findByIdAndDelete(id)
     res.status(200).json({
-        message : "Blog deleted successfully"
+        message: "Blog deleted successfully"
     })
+})
 
+// Update operation
+app.patch("/blog/:id",upload.single('image'),async (req,res)=>{
+    const id = req.params.id
+    const {title,subtitle,description} = req.body
+    let filename;
+    if(req.file){
+        filename = req.file.filename
+        const blog = await Blog.findById(id)
+        const imageName = blog.image
+
+        fs.unlink(`storage/${imageName}`, (err)=>{
+            if(err){
+                console.log(err)
+            }else{
+                console.log("File deleted successfully")
+            }
+        })
+    }
+
+    await Blog.findByIdAndUpdate(id,{
+        title : title,
+        subtitle : subtitle,
+        description : description,
+        image : filename
+    })
+    res.status(200).json({
+        message : "Blog updated successfully"
+    })
 })
 
 
