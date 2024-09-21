@@ -9,6 +9,7 @@ app.use(express.json())
 const {multer,storage} = require('./middleware/multerConfig')
 const upload = multer({storage : storage})
 const fs = require('fs')
+const cors = require('cors')
 
 // app.get('/',(req,res)=>{
 //     res.send("Welcome to home page")
@@ -18,6 +19,13 @@ const fs = require('fs')
 //         message : "Welcome to home page."
 //     })
 // })
+
+
+app.use(cors(
+    {
+        origin : "http://localhost:5173"
+    }
+))
 
 
 app.post('/blog',upload.single('image'),async (req,res)=>{
