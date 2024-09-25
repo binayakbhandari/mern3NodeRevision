@@ -14,11 +14,11 @@ const cors = require('cors')
 app.get('/',(req,res)=>{
     res.send("Welcome to home page")
 })
-// app.get('/',(req,res)=>{
-//     res.status(200).json({
-//         message : "Welcome to home page."
-//     })
-// })
+app.get('/',(req,res)=>{
+    res.status(200).json({
+        message : "Welcome to home page."
+    })
+})
 
 
 app.use(cors(
