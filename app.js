@@ -131,11 +131,14 @@ app.patch("/blog/:id",upload.single('image'),async (req,res)=>{
 })
 
 
+app.use(express.static('./storage'))
 
 
 app.listen(process.env.PORT, ()=>{
     console.log("NodeJS project started")
 })
+
+
 
 // app.listen(3300, ()=>{
 //     console.log("NodeJS project has started")
