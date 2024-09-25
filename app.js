@@ -11,9 +11,9 @@ const upload = multer({storage : storage})
 const fs = require('fs')
 const cors = require('cors')
 
-app.get('/',(req,res)=>{
-    res.send("Welcome to home page")
-})
+// app.get('/',(req,res)=>{
+//     res.send("Welcome to home page")
+// })
 app.get('/',(req,res)=>{
     res.status(200).json({
         message : "Welcome to home page."
