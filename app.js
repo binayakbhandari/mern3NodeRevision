@@ -29,10 +29,13 @@ app.use(cors(
 
 
 app.post('/blog',upload.single('image'),async (req,res)=>{
+    const defaultImage = "https://sharedp.com/wp-content/uploads/2024/06/cute-dp-for-girls-cartoon-4k-960x1024.jpg"
     const {title,subtitle,description} = req.body
     let filename;
     if(req.file){
-        filename = req.file.filename
+        filename = "http://localhost:3000/" + req.file.filename
+    }else{
+        filename = defaultImage
     }
 
     if(!title || !subtitle || !description){
