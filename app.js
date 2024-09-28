@@ -23,7 +23,7 @@ const cors = require('cors')
 
 app.use(cors(
     {
-        origin : 'https://mern-3-0-project1-react.vercel.app'
+        origin : 'https://binayak-one.vercel.app'
     }
 ))
            
