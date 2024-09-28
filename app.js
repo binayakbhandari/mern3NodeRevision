@@ -26,14 +26,14 @@ app.use(cors(
         origin : "https://mern-3-0-project1-react.vercel.app"
     }
 ))
-
+           
 
 app.post('/blog',upload.single('image'),async (req,res)=>{
     const defaultImage = "https://sharedp.com/wp-content/uploads/2024/06/cute-dp-for-girls-cartoon-4k-960x1024.jpg"
     const {title,subtitle,description} = req.body
     let filename;
     if(req.file){
-        filename = "http://localhost:3000/" + req.file.filename
+        filename = "https://mern3-node-ds5t.onrender.com/" + req.file.filename
     }else{
         filename = defaultImage
     }
@@ -109,7 +109,7 @@ app.patch("/blog/:id",upload.single('image'),async (req,res)=>{
     const {title,subtitle,description} = req.body
     let filename;
     if(req.file){
-        filename = "http://localhost:3000/" + req.file.filename
+        filename = "https://mern3-node-ds5t.onrender.com/" + req.file.filename
         const blog = await Blog.findById(id)
         const imageName = blog.image
 
